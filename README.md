@@ -8,6 +8,8 @@ whichever package managers you actually use.
 > package names are **not verified**. The generated commands are illustrative —
 > do not run them yet.
 
+Live at <https://naturalstate.github.io/macwtf_website/>.
+
 ## Running it
 
 No build step. It is a static folder:
@@ -18,8 +20,9 @@ python3 -m http.server 8000
 
 Then open <http://localhost:8000>.
 
-Preact and htm load as ES modules from a CDN, so there is nothing to install.
-Moving to Vite later means keeping the components and swapping htm for JSX.
+Preact and htm are vendored in `assets/vendor` and resolved by an import map,
+so there is nothing to install and the page contacts no third party. Moving to
+Vite later means keeping the components and swapping htm for JSX.
 
 ## Layout
 
@@ -27,6 +30,7 @@ Moving to Vite later means keeping the components and swapping htm for JSX.
 index.html                    markup and style links
 assets/app.js                 the whole app: search, filter, pack builder, commands
 assets/app.css                dark theme
+assets/vendor/                vendored preact + htm
 data/tools.json               generated catalogue
 scripts/parse_catalogue.py    markdown draft -> tools.json
 ```

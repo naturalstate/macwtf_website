@@ -1,16 +1,18 @@
 // macWTF catalogue — MVP.
 //
-// Zero build step on purpose: Preact + htm straight from a CDN as ES modules,
-// so the site is a static folder that can be opened locally or served from
-// GitHub Pages with nothing installed. Moving to Vite later means keeping these
-// components and dropping htm for JSX.
+// Zero build step on purpose: Preact + htm are vendored in assets/vendor and
+// resolved by an import map, so the site is a static folder that opens locally
+// or serves from GitHub Pages with nothing installed. Vendored rather than
+// pulled from a CDN so that visiting the page contacts no third party and the
+// site does not depend on someone else's uptime. Moving to Vite later means
+// keeping these components and dropping htm for JSX.
 //
 // The catalogue is a placeholder dataset generated from the draft markdown.
 // Package names are unverified, and the generated commands are illustrative.
 
-import { h, render } from "https://esm.sh/preact@10.22.0";
-import { useState, useMemo, useEffect, useCallback } from "https://esm.sh/preact@10.22.0/hooks";
-import htm from "https://esm.sh/htm@3.1.1";
+import { h, render } from "preact";
+import { useState, useMemo, useEffect, useCallback } from "preact/hooks";
+import htm from "htm";
 
 const html = htm.bind(h);
 
