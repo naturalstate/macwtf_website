@@ -57,6 +57,12 @@ const BACKEND_ORDER = ["brew", "cask", "mas", "pipx", "go", "cargo", "npm", "gem
 const pkgName = (t) =>
   t.name.split("/")[0].split("(")[0].trim().toLowerCase().replace(/[^a-z0-9.@+-]+/g, "-").replace(/^-|-$/g, "");
 
+// shortName trims the "Security: " prefix, which the sidebar shows as a group
+// heading instead, and the parenthetical asides the draft headings carry.
+function shortName(c) {
+  return c.replace(/^Security: /, "").replace(/\s*\([^)]*\)\s*$/, "");
+}
+
 function Flag({ f }) {
   return html`<span class="flag ${f}" title=${FLAG_HELP[f] || ""}>${FLAG_LABEL[f] || f}</span>`;
 }
@@ -214,10 +220,21 @@ function App({ data }) {
   const [detail, setDetail] = useState(null);
   const [showPack, setShowPack] = useState(false);
 
-  const cats = useMemo(() => {
+  // Categories keep their full names in the data. The sidebar groups the
+  // "Security: ..." ones under a heading rather than deleting the prefix,
+  // which would throw away the taxonomy to save a few pixels.
+  const groups = useMemo(() => {
     const m = new Map();
     for (const t of all) m.set(t.category, (m.get(t.category) || 0) + 1);
-    return [...m.entries()];
+
+    const general = [], security = [];
+    for (const [c, n] of m) {
+      (c.startsWith("Security: ") ? security : general).push([c, n]);
+    }
+    return [
+      ["", general],
+      ["Security", security],
+    ].filter(([, list]) => list.length > 0);
   }, [all]);
 
   const shown = useMemo(() => {
@@ -280,18 +297,23 @@ function App({ data }) {
         <button class="cat ${!cat ? "on" : ""}" onClick=${() => setCat(null)}>
           All <span class="n">${all.length}</span>
         </button>
-        ${cats.map(([c, n]) => html`
-          <button class="cat ${cat === c ? "on" : ""}" key=${c} onClick=${() => setCat(cat === c ? null : c)}>
-            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-              ${c.replace(/^Security: /, "")}
-            </span>
-            <span class="n">${n}</span>
-          </button>`)}
+        ${groups.map(([label, list]) => html`
+          <div key=${label || "general"}>
+            ${label && html`<div class="side-label" style="margin-top:14px">${label}</div>`}
+            ${list.map(([c, n]) => html`
+              <button class="cat ${cat === c ? "on" : ""}" key=${c}
+                      title=${c} onClick=${() => setCat(cat === c ? null : c)}>
+                <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                  ${shortName(c)}
+                </span>
+                <span class="n">${n}</span>
+              </button>`)}
+          </div>`)}
       </aside>
 
       <main>
         <div class="toolbar">
-          <div class="result-count"><b>${shown.length}</b> tools${cat ? ` in ${cat}` : ""}</div>
+          <div class="result-count"><b>${shown.length}</b> tools${cat ? html` in <b>${cat}</b>` : ""}</div>
           <div class="chipbar">
             ${["brew", "cask", "pipx", "go"].map((b) => html`
               <button class="fchip ${flags.includes(b) ? "on" : ""}" key=${b}
