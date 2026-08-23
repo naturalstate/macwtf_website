@@ -872,17 +872,7 @@ const FAMILY = [
 
 function Family() {
   return html`
-    <div class="wrap fam">
-      <header class="hero">
-        <span class="stamp">✦ Three platforms, one idea</span>
-        <h1>Every platform <span class="zing">hides</span> its good tooling.</h1>
-        <p class="sub">
-          WTF is a set of installers built on one rule: the tool catalogue is data, the
-          engine is code, and they never mix. Adding a tool is an edit to a text file,
-          never a change to a program. Same idea, three operating systems.
-        </p>
-      </header>
-
+    <div class="fam">
       <div class="fam-grid">
         ${FAMILY.map(a => html`
           <article class="fam-card" key=${a.key} style=${`--tone:${a.tone}`}>
@@ -907,12 +897,6 @@ function Family() {
             </div>
           </article>`)}
       </div>
-
-      <p class="fam-foot">
-        A fourth, <b>kaliWTF</b>, is planned. The catalogue format is already shared across
-        all of them — one entry describes a tool on every platform it exists on, and each
-        installer loads only the part that applies to it.
-      </p>
     </div>`;
 }
 
@@ -920,6 +904,15 @@ function Family() {
 
 function App({ data, packs }) {
   const route = useRoute();
+
+  // The family page stands alone: no nav, no footer. Both are macWTF-branded,
+  // and this one page has to represent all three tools evenly.
+  if (route.name === "wtf") {
+    return html`
+      <div class="blob a"></div><div class="blob b"></div><div class="blob c"></div>
+      <div class="grain"></div>
+      <${Family} />`;
+  }
 
   let body;
   switch (route.name) {

@@ -539,25 +539,30 @@ footer.foot { border-top: 1px solid var(--line); color: var(--dim); font-size: 1
 
 /* ----------------------------------------------------------- family page
 
-   The standalone landing page for all three WTF tools. Each card carries its
-   own --tone so the three read as siblings rather than one repeated block. */
+   A standalone page: no nav, no footer, nothing macWTF-branded, because it has
+   to represent all three tools evenly. Three boxes centred in the viewport and
+   nothing else, so the wordmarks carry the page instead of a headline. */
 
-.fam .hero { padding-bottom: 8px; }
+.fam {
+  min-height: 100vh; min-height: 100dvh;
+  display: grid; align-content: center;
+  padding: 56px 24px; max-width: 1180px; margin: 0 auto;
+}
 
 .fam-grid {
-  display: grid; gap: 20px; margin: 30px 0 0;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  display: grid; gap: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .fam-card {
   position: relative; display: flex; flex-direction: column;
   background: var(--card); border: 1px solid var(--line);
-  border-radius: 18px; padding: 24px 22px 22px;
+  border-radius: 20px; padding: 30px 28px 26px;
   transition: border-color .16s, transform .16s, box-shadow .16s;
 }
 .fam-card::before {
   content: ""; position: absolute; inset: 0 0 auto; height: 3px;
-  border-radius: 18px 18px 0 0; background: var(--tone); opacity: .85;
+  border-radius: 20px 20px 0 0; background: var(--tone); opacity: .85;
 }
 .fam-card:hover {
   border-color: color-mix(in srgb, var(--tone) 55%, var(--line));
@@ -566,40 +571,46 @@ footer.foot { border-top: 1px solid var(--line); color: var(--dim); font-size: 1
 }
 
 .fam-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.fam-glyph { font-size: 22px; line-height: 1; color: var(--tone); }
+.fam-glyph { font-size: 26px; line-height: 1; color: var(--tone); }
 .fam-status {
-  font: 700 9.5px var(--mono); text-transform: uppercase; letter-spacing: .12em;
+  font: 700 9px var(--mono); text-transform: uppercase; letter-spacing: .13em;
   color: var(--tone); border: 1px solid color-mix(in srgb, var(--tone) 40%, transparent);
   background: color-mix(in srgb, var(--tone) 10%, transparent);
   border-radius: 99px; padding: 5px 10px; white-space: nowrap;
 }
 
-.fam-word { font: 700 30px/1.05 var(--sans); margin: 16px 0 2px; letter-spacing: -.02em; }
-.fam-os { font: 500 12px var(--mono); color: var(--dim); }
-.fam-blurb { color: var(--muted); font-size: 14.5px; line-height: 1.62; margin: 14px 0 0; flex: 1; }
+/* The type scale does the work the removed headline used to. The wordmark is
+   the largest thing on the page; everything under it steps down hard. */
+.fam-word {
+  font: 700 clamp(34px, 3.6vw, 46px)/1 var(--sans);
+  margin: 20px 0 0; letter-spacing: -.035em;
+}
+.fam-os {
+  display: block; margin-top: 9px;
+  font: 400 15px/1 var(--serif); font-style: italic; color: var(--tone); opacity: .8;
+}
+.fam-blurb {
+  color: var(--muted); font-size: 14px; line-height: 1.68;
+  margin: 18px 0 0; flex: 1;
+}
 
-.fam-links { display: flex; align-items: center; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+.fam-links { display: flex; align-items: center; gap: 10px; margin-top: 26px; flex-wrap: wrap; }
 .fam-btn {
-  font: 700 12.5px var(--sans); padding: 9px 15px; border-radius: 10px;
+  font: 700 12.5px var(--sans); padding: 10px 16px; border-radius: 10px;
   background: var(--tone); color: #0b0b10; white-space: nowrap;
 }
 .fam-btn:hover { text-decoration: none; filter: brightness(1.12); }
 .fam-gh {
   display: inline-flex; align-items: center; gap: 7px;
-  font: 600 12.5px var(--sans); padding: 9px 14px; border-radius: 10px;
+  font: 600 12.5px var(--sans); padding: 10px 15px; border-radius: 10px;
   border: 1px solid var(--line); color: var(--muted);
 }
 .fam-gh:hover { border-color: var(--tone); color: var(--tone); text-decoration: none; }
-
-.fam-foot {
-  margin: 34px 0 0; padding-top: 22px; border-top: 1px solid var(--line);
-  color: var(--dim); font-size: 13.5px; line-height: 1.65; max-width: 74ch;
-}
-.fam-foot b { color: var(--muted); font-weight: 600; }
 
 /* The footer pointer to the family page: present, but quiet. */
 .fam-link { margin: 10px 0 0; }
 .fam-link a { font: 500 11.5px var(--mono); color: var(--dim); letter-spacing: .04em; }
 .fam-link a:hover { color: var(--cyan); }
+
 .fam-gh.off { color: var(--dim); opacity: .5; cursor: default; }
 .fam-gh.off:hover { border-color: var(--line); color: var(--dim); }
