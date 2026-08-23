@@ -172,7 +172,7 @@ const INSTALL = "git clone https://github.com/naturalstate/macWTF.git && cd macW
 const PLATFORMS = [
   { name: "macOS",   status: "available now", on: true },
   { name: "Windows", status: "site up, tool in design",
-    href: "https://naturalstate.github.io/windowswtf_website/" },
+    href: "https://naturalstate.github.io/windowsWTF_website/" },
   { name: "Android", status: "site up, tool in design",
     href: "https://naturalstate.github.io/androidWTF_website/" },
   { name: "Kali",    status: "planned" },
@@ -846,7 +846,7 @@ function App({ data, packs }) {
       <footer class="foot">
         <div class="family">
           <span class="here">macWTF</span>
-          <a class="soon" href="https://naturalstate.github.io/windowswtf_website/">WindowsWTF <em>site</em></a>
+          <a class="soon" href="https://naturalstate.github.io/windowsWTF_website/">WindowsWTF <em>site</em></a>
           <a class="soon" href="https://naturalstate.github.io/androidWTF_website/">AndroidWTF <em>site</em></a>
           <span class="soon">KaliWTF <em>soon</em></span>
         </div>
