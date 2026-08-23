@@ -817,6 +817,105 @@ function CLI({ data }) {
     </div>`;
 }
 
+// ------------------------------------------------------------ family page
+
+// A standalone landing page for the three WTF tools. It is deliberately not in
+// the top nav — it is a page to hand someone, reached from the small footer
+// link, and the same page is linked from the Windows and Android sites.
+const GITHUB_MARK = html`
+  <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" fill="currentColor">
+    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+             0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+             -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+             .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+             -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
+             .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12
+             .51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+             0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+  </svg>`;
+
+const FAMILY = [
+  {
+    // Geometric marks rather than vendor logos: they render identically on every
+    // platform, and an Apple logo glyph would be blank on the two thirds of
+    // visitors arriving from the Windows and Android sites.
+    key: "mac", word: "macWTF", os: "macOS", glyph: "◆",
+    tone: "var(--accent)", status: "Available now",
+    blurb: `The tooling macOS leaves out. 552 curated pentesting, InfoSec and
+            development tools, each installed through whichever package manager it
+            actually needs — Homebrew, pipx, go, cargo, npm, gem — and every manual
+            step macOS still demands collected into one checklist at the end.`,
+    repo: "https://github.com/naturalstate/macWTF",
+    site: "#/",
+  },
+  {
+    key: "win", word: "windowsWTF", os: "Windows", glyph: "⊞",
+    tone: "var(--cyan)", status: "Site up · tool in design",
+    blurb: `The same idea aimed at Windows: one catalogue, many package managers,
+            winget and Chocolatey and Scoop pulling in the same direction instead of
+            three half-finished setups fighting each other.`,
+    repo: "https://github.com/naturalstate/windowsWTF",
+    site: "https://naturalstate.github.io/windowsWTF_website/",
+  },
+  {
+    key: "droid", word: "androidWTF", os: "Android", glyph: "▲",
+    tone: "var(--lime)", status: "Site up · tool in design",
+    blurb: `Android as a target and as a platform — the mobile security toolkit,
+            the ADB workflow and the emulator plumbing, set up once and reproducibly
+            rather than rediscovered every engagement.`,
+    // No repo yet — the tool is still conceptual. Showing a dead GitHub link
+    // is worse than showing none, so the chip renders inert instead.
+    repo: null,
+    site: "https://naturalstate.github.io/androidWTF_website/",
+  },
+];
+
+function Family() {
+  return html`
+    <div class="wrap fam">
+      <header class="hero">
+        <span class="stamp">✦ Three platforms, one idea</span>
+        <h1>Every platform <span class="zing">hides</span> its good tooling.</h1>
+        <p class="sub">
+          WTF is a set of installers built on one rule: the tool catalogue is data, the
+          engine is code, and they never mix. Adding a tool is an edit to a text file,
+          never a change to a program. Same idea, three operating systems.
+        </p>
+      </header>
+
+      <div class="fam-grid">
+        ${FAMILY.map(a => html`
+          <article class="fam-card" key=${a.key} style=${`--tone:${a.tone}`}>
+            <div class="fam-top">
+              <span class="fam-glyph">${a.glyph}</span>
+              <span class="fam-status">${a.status}</span>
+            </div>
+            <h2 class="fam-word">${a.word}</h2>
+            <span class="fam-os">for ${a.os}</span>
+            <p class="fam-blurb">${a.blurb}</p>
+            <div class="fam-links">
+              <a class="fam-btn" href=${a.site}>
+                ${a.key === "mac" ? "Open the site" : "Visit the site"} <span aria-hidden="true">→</span>
+              </a>
+              ${a.repo
+                ? html`<a class="fam-gh" href=${a.repo} title=${`${a.word} on GitHub`}>
+                         ${GITHUB_MARK}<span>GitHub</span>
+                       </a>`
+                : html`<span class="fam-gh off" title="No public repository yet">
+                         ${GITHUB_MARK}<span>Repo soon</span>
+                       </span>`}
+            </div>
+          </article>`)}
+      </div>
+
+      <p class="fam-foot">
+        A fourth, <b>kaliWTF</b>, is planned. The catalogue format is already shared across
+        all of them — one entry describes a tool on every platform it exists on, and each
+        installer loads only the part that applies to it.
+      </p>
+    </div>`;
+}
+
 // -------------------------------------------------------------------- app
 
 function App({ data, packs }) {
@@ -827,6 +926,7 @@ function App({ data, packs }) {
     case "tools": body = html`<${Tools} data=${data} packs=${packs} />`; break;
     case "packs": body = html`<${Packs} data=${data} packs=${packs} />`; break;
     case "cli":   body = html`<${CLI} data=${data} />`; break;
+    case "wtf":   body = html`<${Family} />`; break;
     case "pack":  body = html`<${Tools} data=${data} packs=${packs} initialPack=${route.arg} />`; break;
     case "share": {
       const [name, ids] = route.arg.split("~");
@@ -854,6 +954,7 @@ function App({ data, packs }) {
           Generated from the macWTF manifests · package names verified against their registries ·
           <a href="https://github.com/naturalstate/macWTF">source on GitHub</a>
         </p>
+        <p class="fam-link"><a href="#/wtf">All three WTF tools →</a></p>
       </footer>
     </div>`;
 }
