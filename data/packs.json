@@ -1,0 +1,32 @@
+{
+ "featured": [
+  {"id":"hacker","name":"Hacker Pack","tagline":"The full offensive kit",
+   "blurb":"Recon, web, network and password tooling. Everything for an engagement, minus what macOS cannot run.",
+   "profile":"pentest","accent":"#a78bfa","glyph":"◈"},
+  {"id":"red-team","name":"Red Team","tagline":"Post-exploitation and AD",
+   "blurb":"BloodHound, Impacket, NetExec, Kerberos tooling and the payloads you carry to a target.",
+   "categories":["sec-network","payloads"],"accent":"#f87171","glyph":"⬢"},
+  {"id":"web","name":"Web Hacking","tagline":"Proxies and injection",
+   "blurb":"Burp, Caido, mitmproxy and the discovery tooling that feeds them.",
+   "profile":"web","accent":"#fbbf24","glyph":"◆"},
+  {"id":"defense","name":"Defense Pack","tagline":"Watch your own machine",
+   "blurb":"The Objective-See suite, Santa, forensics and traffic analysis.",
+   "categories":["sec-macos","sec-reversing"],"accent":"#34d399","glyph":"⬡"},
+  {"id":"developer","name":"Developer",
+   "tagline":"Editors, runtimes, containers",
+   "blurb":"Everything to write and ship code, from language toolchains to databases.",
+   "categories":["dev"],"accent":"#60a5fa","glyph":"◇"},
+  {"id":"terminal","name":"Terminal Pack","tagline":"A shell worth using",
+   "blurb":"A modern terminal, a prompt, and the CLI replacements macOS should have shipped.",
+   "categories":["terminal","shell","cli"],"accent":"#22d3ee","glyph":"▣"},
+  {"id":"browsers","name":"Browser Pack","tagline":"Every engine you need",
+   "blurb":"Chromium and Firefox families, hardened builds, and a Tor browser.",
+   "categories":["browsers"],"accent":"#c084fc","glyph":"◉"},
+  {"id":"radio","name":"SDR & Hardware","tagline":"Radio, RFID, serial",
+   "blurb":"GNU Radio, HackRF, Proxmark, Flipper and the embedded toolchain.",
+   "categories":["sdr"],"accent":"#fb923c","glyph":"◎"},
+  {"id":"tweaks","name":"System Tweaks","tagline":"Fix macOS defaults",
+   "blurb":"Show hidden files, kill smart quotes, fast key repeat. Every one reversible.",
+   "categories":["system-tweaks"],"accent":"#94a3b8","glyph":"⬦"}
+ ]
+}
