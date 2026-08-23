@@ -465,3 +465,62 @@ footer.foot { border-top: 1px solid var(--line); color: var(--dim); font-size: 1
 .linkish:hover { text-decoration: underline; }
 .linkish.dim { color: var(--dim); }
 .linkish.dim:hover { color: var(--muted); }
+
+/* -------------------------------------------------------------- cli page */
+
+.doc section { padding: 44px 0; border-top: 1px solid var(--line); }
+.doc section:first-of-type { border-top: 0; }
+.doc h2 { margin-bottom: 14px; }
+.doc .lede { color: #c9c9cf; font-size: 16px; line-height: 1.65; max-width: 68ch; margin: 0 0 18px; }
+.doc .fine { color: var(--muted); font-size: 13.5px; line-height: 1.6; max-width: 68ch; margin: 14px 0 0; }
+.doc code {
+  font: 500 12.5px var(--mono); background: rgba(255,255,255,.05);
+  border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; color: #d6d6e4;
+}
+.doc .cmd { margin-bottom: 4px; }
+
+.step { display: grid; grid-template-columns: 34px 1fr; gap: 16px; margin-top: 26px; }
+.step-n {
+  width: 30px; height: 30px; border-radius: 9px;
+  background: rgba(167,139,250,.14); border: 1px solid var(--accent);
+  color: var(--accent); font: 700 14px var(--mono);
+  display: grid; place-items: center; transform: rotate(-4deg);
+}
+.step-body h3 { font-size: 17px; margin-bottom: 8px; }
+.step-body p { color: var(--muted); font-size: 14px; margin: 10px 0 0; max-width: 66ch; }
+
+/* Screenshots, and the placeholder that stands in until one exists. */
+.shot { margin: 30px 0; }
+.shot img {
+  width: 100%; display: block; border-radius: 16px;
+  border: 1px solid var(--line); box-shadow: var(--shadow);
+}
+.shot-ph {
+  /* align-content packs the two rows together; place-items alone centres each
+     row within its own share of the box, which spreads them to the edges. */
+  display: grid; place-items: center; align-content: center; gap: 10px;
+  aspect-ratio: 16 / 10; border-radius: 16px;
+  border: 1px dashed var(--line);
+  background: linear-gradient(180deg, var(--bg2), var(--card));
+}
+.shot-ph-icon { font-size: 30px; color: var(--line); }
+.shot-ph-file { font: 500 11.5px var(--mono); color: var(--dim); letter-spacing: .04em; }
+.shot figcaption {
+  margin-top: 11px; font-size: 13px; color: var(--muted); text-align: center; line-height: 1.55;
+}
+
+.callout {
+  margin-top: 26px; padding: 16px 18px;
+  border: 1px solid rgba(255,158,66,.28); background: rgba(255,158,66,.08);
+  border-radius: 14px; color: #ffd7a8; font-size: 13.5px; line-height: 1.65;
+}
+.callout b { color: #ffe9c9; }
+.callout code { background: rgba(0,0,0,.3); border-color: rgba(255,158,66,.28); color: #ffd7a8; }
+
+.cmdlist { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.cmdlist > div {
+  display: flex; gap: 18px; align-items: baseline; flex-wrap: wrap;
+  background: var(--card); padding: 13px 16px;
+}
+.cmdlist code { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 500; }
+.cmdlist span { color: var(--muted); font-size: 13.5px; }

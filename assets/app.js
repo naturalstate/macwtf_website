@@ -117,6 +117,7 @@ function Nav({ route }) {
     <a href="#/" class=${route.name === "home" ? "on" : ""}>Home</a>
     <a href="#/tools" class=${route.name === "tools" ? "on" : ""}>Tools</a>
     <a href="#/packs" class=${route.name === "packs" || route.name === "pack" ? "on" : ""}>Packs</a>
+    <a href="#/cli" class=${route.name === "cli" ? "on" : ""}>The CLI</a>
     <a href="https://github.com/naturalstate/macWTF">GitHub</a>`;
 
   return html`
@@ -651,6 +652,157 @@ function Tools({ data, packs, initialPack, shared }) {
                                          onClear=${() => { setPicked(new Set()); setShowCmds(false); }} />`}`;
 }
 
+// --------------------------------------------------------------- cli page
+
+// Shot renders a screenshot, or a labelled placeholder naming the file that
+// would go there. A missing image should be obvious rather than an empty gap.
+function Shot({ file, caption }) {
+  const [missing, setMissing] = useState(false);
+  const src = `./assets/screenshots/${file}`;
+  return html`
+    <figure class="shot">
+      ${missing
+        ? html`<div class="shot-ph">
+                 <span class="shot-ph-icon">▣</span>
+                 <span class="shot-ph-file">assets/screenshots/${file}</span>
+               </div>`
+        : html`<img src=${src} alt=${caption} loading="lazy" onError=${() => setMissing(true)} />`}
+      <figcaption>${caption}</figcaption>
+    </figure>`;
+}
+
+function Step({ n, title, children }) {
+  return html`
+    <div class="step">
+      <div class="step-n">${n}</div>
+      <div class="step-body"><h3>${title}</h3>${children}</div>
+    </div>`;
+}
+
+function CLI({ data }) {
+  return html`
+    <div class="wrap doc">
+      <header class="hero" style="padding-bottom:24px">
+        <span class="stamp">✦ Command line</span>
+        <h1>One command, <span class="zing">then done</span>.</h1>
+        <p class="sub">
+          macwtf is a terminal application that installs the catalogue for you. It works out
+          the right package manager for each tool, skips what you already have, and finishes
+          by telling you every step macOS still needs you to do by hand.
+        </p>
+        <div class="cta">
+          <a class="btn" href="https://github.com/naturalstate/macWTF">Get it on GitHub</a>
+          <a class="btn ghost" href="#/packs">See the packs</a>
+        </div>
+      </header>
+
+      <${Shot} file="01-profiles.png"
+               caption="Pick a starting point. Every selection stays editable afterwards." />
+
+      <section>
+        <h2>Installing it</h2>
+        <p class="lede">
+          Build it from a checkout. It takes a few seconds, and there is a reason it is not a
+          download: a binary you compile yourself is never quarantined, whereas one downloaded
+          through a browser is blocked by Gatekeeper until it is notarised.
+        </p>
+        <${Copyable} text=${INSTALL} />
+        <p class="fine">
+          Needs macOS on Apple Silicon. If Go is missing the installer offers to fetch it
+          through Homebrew. macwtf lands in <code>~/.local/bin</code>.
+        </p>
+
+        <${Step} n="1" title="Check the machine is ready">
+          <p>Reports what is present and, for anything missing, the exact command that fixes it.
+             It changes nothing.</p>
+          <${Copyable} text="macwtf doctor" />
+        </${Step}>
+      </section>
+
+      <section>
+        <h2>Using it</h2>
+        <p class="lede">
+          Run it with no arguments for the interactive interface: pick a profile, adjust the
+          selection, review exactly what will run, then install.
+        </p>
+        <${Copyable} text="macwtf" />
+
+        <${Shot} file="02-catalogue.png"
+                 caption="The catalogue. Your selection is pinned at the top so you never have to hunt for it." />
+
+        <p class="lede">Or say what you want directly:</p>
+        <${Copyable} text=${[
+          "macwtf install --profile pentest      # a whole profile",
+          "macwtf install --category sec-recon   # everything in a category",
+          "macwtf install --tool nmap            # one tool and its dependencies",
+        ].join("\n")} />
+
+        <${Shot} file="03-plan.png"
+                 caption="Every command is shown before anything runs. Add --dry-run to stop there." />
+
+        <p class="fine">
+          <b>Nothing installs twice.</b> Anything already on the machine is skipped, so
+          re-running a profile is a no-op rather than a reinstall.
+        </p>
+
+        <${Shot} file="04-progress.png"
+                 caption="A run in progress. Press v to see the command output behind it." />
+
+        <${Shot} file="05-report.png"
+                 caption="The report at the end: what installed, and every permission macOS still needs you to grant by hand." />
+      </section>
+
+      <section>
+        <h2>Undoing it</h2>
+        <p class="lede">
+          macwtf records what it installed, and removes only that. Anything already on the
+          machine before it ran is left alone — taking something you had for years would make
+          this a dangerous tool rather than a useful one.
+        </p>
+
+        <${Step} n="1" title="See what it did">
+          <${Copyable} text="macwtf status" />
+          <p>Lists what macwtf installed, separately from what was already there and what failed.</p>
+        </${Step}>
+
+        <${Step} n="2" title="Remove some of it">
+          <${Copyable} text=${[
+            "macwtf remove --tool nmap",
+            "macwtf remove --profile pentest",
+            "macwtf remove --profile pentest --dry-run   # look first",
+          ].join("\n")} />
+        </${Step}>
+
+        <${Step} n="3" title="Or put the machine back">
+          <${Copyable} text="macwtf reset" />
+          <p>Uninstalls everything macwtf installed and forgets it, so the next run starts clean.</p>
+        </${Step}>
+
+        <div class="callout">
+          <b>What removing does not undo.</b> Dependencies Homebrew pulled in on its own,
+          permissions you granted in System Settings, configuration left in your home directory,
+          and system preferences changed by the tweaks category. Both <code>remove</code> and
+          <code>reset</code> say so at the end rather than implying a clean slate.
+        </div>
+      </section>
+
+      <section>
+        <h2>Everything else</h2>
+        <div class="cmdlist">
+          <div><code>macwtf validate</code><span>Check the catalogue for errors, offline</span></div>
+          <div><code>macwtf check</code><span>Verify every package name still resolves upstream</span></div>
+          <div><code>macwtf list --profiles</code><span>Show the profiles and what they resolve to</span></div>
+          <div><code>macwtf install --allow-quarantine-strip</code><span>Permit clearing Gatekeeper on unsigned apps</span></div>
+        </div>
+        <p class="fine" style="margin-top:22px">
+          Full documentation, the manifests and the source are on
+          <a href="https://github.com/naturalstate/macWTF">GitHub</a>. Every run also writes a
+          complete log to <code>~/.macwtf/logs</code>.
+        </p>
+      </section>
+    </div>`;
+}
+
 // -------------------------------------------------------------------- app
 
 function App({ data, packs }) {
@@ -660,6 +812,7 @@ function App({ data, packs }) {
   switch (route.name) {
     case "tools": body = html`<${Tools} data=${data} packs=${packs} />`; break;
     case "packs": body = html`<${Packs} data=${data} packs=${packs} />`; break;
+    case "cli":   body = html`<${CLI} data=${data} />`; break;
     case "pack":  body = html`<${Tools} data=${data} packs=${packs} initialPack=${route.arg} />`; break;
     case "share": {
       const [name, ids] = route.arg.split("~");
