@@ -437,3 +437,31 @@ footer.foot { border-top: 1px solid var(--line); color: var(--dim); font-size: 1
 
 .build-hint { font-size: 13px; color: var(--dim); margin-bottom: 4px; }
 .build-hint b { color: var(--accent); }
+
+/* --------------------------------------------------------------- filters */
+
+.filters {
+  display: grid; gap: 16px;
+  background: linear-gradient(180deg, var(--bg2), var(--card));
+  border: 1px solid var(--line); border-radius: 16px;
+  padding: 18px 20px; margin-bottom: 16px;
+}
+.fgroup { display: grid; gap: 8px; }
+.flabel { font: 700 10px var(--mono); text-transform: uppercase; letter-spacing: .14em; color: var(--dim); }
+.frow { display: flex; gap: 7px; flex-wrap: wrap; }
+.frow .chip { padding: 5px 12px; font-size: 12.5px; }
+
+/* Select-all lives with the result count, where the current view is described:
+   filter down to what you want, then take all of it. */
+.resultbar {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  margin-bottom: 16px; font-size: 13.5px; color: var(--muted);
+}
+.resultbar b { color: var(--ink); }
+.linkish {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font: 600 13px var(--sans); color: var(--accent);
+}
+.linkish:hover { text-decoration: underline; }
+.linkish.dim { color: var(--dim); }
+.linkish.dim:hover { color: var(--muted); }

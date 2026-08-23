@@ -59,6 +59,24 @@ function storeSaved(packs) {
 const shareURL = (name, ids) =>
   `${location.origin}${location.pathname}#/share/${encodeURIComponent(name)}~${ids.join(",")}`;
 
+// toggleIn adds or removes a value from a list, for multi-select filters.
+const toggleIn = (list, v) => list.includes(v) ? list.filter(x => x !== v) : [...list, v];
+
+function FilterGroup({ label, options, active, onToggle }) {
+  return html`
+    <div class="fgroup">
+      <div class="flabel">${label}</div>
+      <div class="frow">
+        ${options.map(o => {
+          const [val, text] = Array.isArray(o) ? o : [o, o];
+          return html`
+            <button class="chip ${active.includes(val) ? "on" : ""}" key=${val}
+                    onClick=${() => onToggle(val)}>${text}</button>`;
+        })}
+      </div>
+    </div>`;
+}
+
 // ------------------------------------------------------------------ routing
 
 function useRoute() {
@@ -432,7 +450,11 @@ function Tools({ data, packs, initialPack, shared }) {
   const all = data.tools;
   const [q, setQ] = useState("");
   const [cat, setCat] = useState(null);
-  const [chips, setChips] = useState([]);
+  const [backends, setBackends] = useState([]);
+  const [flags, setFlags] = useState([]);
+  const [licenses, setLicenses] = useState([]);
+  const [status, setStatus] = useState(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [picked, setPicked] = useState(() => new Set());
   const [detail, setDetail] = useState(null);
   const [showCmds, setShowCmds] = useState(false);
@@ -471,12 +493,16 @@ function Tools({ data, packs, initialPack, shared }) {
     return all.filter(t => {
       if (scope && !scope.has(t.id)) return false;
       if (cat && t.category !== cat) return false;
-      if (chips.length && !chips.every(c => t.flags.includes(c) || t.backend === c)) return false;
+      if (backends.length && !backends.includes(t.backend)) return false;
+      if (flags.length && !flags.every(f => t.flags.includes(f))) return false;
+      if (licenses.length && !licenses.includes(t.license)) return false;
+      if (status === "verified" && t.unverified) return false;
+      if (status === "unverified" && !t.unverified) return false;
       if (!needle) return true;
       return `${t.name} ${t.description} ${t.categoryLabel} ${t.backend} ${t.package}`
         .toLowerCase().includes(needle);
     });
-  }, [all, q, cat, chips, scope]);
+  }, [all, q, cat, backends, flags, licenses, status, scope]);
 
   const toggle = useCallback(id => setPicked(prev => {
     const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n;
@@ -492,6 +518,19 @@ function Tools({ data, packs, initialPack, shared }) {
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
   }, []);
+
+  // Only offer backends that actually appear, so the filter never shows a
+  // choice that returns nothing.
+  const backendOptions = useMemo(() => {
+    const counts = {};
+    for (const t of all) counts[t.backend] = (counts[t.backend] || 0) + 1;
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([b, n]) => [b, `${b} ${n}`]);
+  }, [all]);
+
+  const activeCount = backends.length + flags.length + licenses.length +
+    (status ? 1 : 0) + (cat ? 1 : 0);
 
   const pickedTools = all.filter(t => picked.has(t.id));
   const activePack = initialPack
@@ -538,19 +577,45 @@ function Tools({ data, packs, initialPack, shared }) {
             <button class="chip cats-toggle" onClick=${() => setCatsOpen(!catsOpen)}>
               ${cat ? data.categories.find(c => c.slug === cat)?.label : "Categories"}
             </button>
+            <button class="chip ${filtersOpen || activeCount ? "on" : ""}"
+                    onClick=${() => setFiltersOpen(!filtersOpen)}>
+              Filters${activeCount ? ` · ${activeCount}` : ""}
+            </button>
           </div>
-          <div class="toolbar">
-            ${["brew","cask","pipx","go","git"].map(b => html`
-              <button class="chip ${chips.includes(b) ? "on" : ""}" key=${b}
-                      onClick=${() => setChips(p => p.includes(b) ? p.filter(x => x !== b) : [...p, b])}>${b}</button>`)}
-            ${["quarantine","tcc"].map(f => html`
-              <button class="chip ${chips.includes(f) ? "on" : ""}" key=${f}
-                      onClick=${() => setChips(p => p.includes(f) ? p.filter(x => x !== f) : [...p, f])}>${FLAG_LABEL[f]}</button>`)}
-            <span style="margin-left:auto;color:var(--muted);font-size:13.5px">
-              <b style="color:var(--ink)">${shown.length}</b> shown</span>
-          </div>
-          <div class="build-hint">
-            Press <b>+</b> on any tool to start building a pack${picked.size > 0 ? "" : " — nothing is selected yet"}.
+          ${filtersOpen && html`
+            <div class="filters">
+              <${FilterGroup} label="Installed with" options=${backendOptions}
+                              active=${backends} onToggle=${v => setBackends(toggleIn(backends, v))} />
+              <${FilterGroup} label="Needs attention"
+                              options=${[["quarantine","Unsigned"],["tcc","Permission"],["rosetta","Rosetta"]]}
+                              active=${flags} onToggle=${v => setFlags(toggleIn(flags, v))} />
+              <${FilterGroup} label="License"
+                              options=${[["free","Free"],["freemium","Freemium"],["paid","Paid"]]}
+                              active=${licenses} onToggle=${v => setLicenses(toggleIn(licenses, v))} />
+              <${FilterGroup} label="Package name"
+                              options=${[["verified","Verified"],["unverified","Unverified"]]}
+                              active=${status ? [status] : []}
+                              onToggle=${v => setStatus(status === v ? null : v)} />
+              ${activeCount > 0 && html`
+                <button class="btn ghost sm" style="align-self:start;margin-top:6px"
+                        onClick=${() => { setBackends([]); setFlags([]); setLicenses([]); setStatus(null); setCat(null); }}>
+                  Clear ${activeCount} filter${activeCount === 1 ? "" : "s"}
+                </button>`}
+            </div>`}
+
+          <div class="resultbar">
+            <span><b>${shown.length}</b> ${shown.length === 1 ? "tool" : "tools"}${
+              scope ? " in this pack" : ""}${cat ? ` in ${data.categories.find(c => c.slug === cat)?.label}` : ""}</span>
+            ${shown.length > 0 && html`
+              <button class="linkish" onClick=${() => setPicked(prev => {
+                const n = new Set(prev); shown.forEach(t => n.add(t.id)); return n;
+              })}>Select all ${shown.length}</button>`}
+            ${shown.some(t => picked.has(t.id)) && html`
+              <button class="linkish" onClick=${() => setPicked(prev => {
+                const n = new Set(prev); shown.forEach(t => n.delete(t.id)); return n;
+              })}>Deselect these</button>`}
+            ${picked.size > 0 && html`
+              <button class="linkish dim" onClick=${() => setPicked(new Set())}>Clear all (${picked.size})</button>`}
           </div>
 
           ${shown.length === 0
