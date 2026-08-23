@@ -167,6 +167,16 @@ function PackGrid({ data, packs }) {
 
 const INSTALL = "git clone https://github.com/naturalstate/macWTF.git && cd macWTF && ./install.sh";
 
+// The WTF family. Only macOS has a working tool; the others are at varying
+// stages, and saying which is more useful than four identical "coming soon"s.
+const PLATFORMS = [
+  { name: "macOS",   status: "available now",      on: true },
+  { name: "Android", status: "site up, tool in design",
+    href: "https://naturalstate.github.io/androidWTF_website/" },
+  { name: "Kali",    status: "planned" },
+  { name: "Windows", status: "planned" },
+];
+
 function Home({ data, packs }) {
   const verified = data.tools.filter(t => !t.unverified).length;
 
@@ -214,10 +224,13 @@ function Home({ data, packs }) {
           <p>Each tool is described once. Only the install command differs.</p>
         </div>
         <div class="platforms">
-          <div class="plat on"><b>macOS</b><span>available now</span></div>
-          <div class="plat"><b>Kali</b><span>coming soon</span></div>
-          <div class="plat"><b>Windows</b><span>coming soon</span></div>
-          <div class="plat"><b>Android</b><span>coming soon</span></div>
+          ${PLATFORMS.map(p => {
+            const inner = html`<b>${p.name}</b><span>${p.status}</span>`;
+            return p.href
+              ? html`<a class="plat ${p.on ? "on" : ""} linked" key=${p.name} href=${p.href}>
+                       ${inner}<span class="plat-go">visit ↗</span></a>`
+              : html`<div class="plat ${p.on ? "on" : ""}" key=${p.name}>${inner}</div>`;
+          })}
         </div>
       </section>
 
@@ -832,9 +845,9 @@ function App({ data, packs }) {
       <footer class="foot">
         <div class="family">
           <span class="here">macWTF</span>
+          <a class="soon" href="https://naturalstate.github.io/androidWTF_website/">AndroidWTF <em>site</em></a>
           <span class="soon">KaliWTF <em>soon</em></span>
           <span class="soon">WindowsWTF <em>soon</em></span>
-          <span class="soon">AndroidWTF <em>soon</em></span>
         </div>
         <p style="margin:18px 0 0">
           Generated from the macWTF manifests · package names verified against their registries ·

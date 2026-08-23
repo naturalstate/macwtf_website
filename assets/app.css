@@ -524,3 +524,15 @@ footer.foot { border-top: 1px solid var(--line); color: var(--dim); font-size: 1
 }
 .cmdlist code { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 500; }
 .cmdlist span { color: var(--muted); font-size: 13.5px; }
+
+/* A platform with a site of its own is a link; one without is not. */
+.plat.linked { display: block; position: relative; transition: border-color .15s, transform .15s; }
+.plat.linked:hover { border-color: var(--cyan); transform: translateY(-2px); text-decoration: none; }
+.plat.linked:hover b { color: var(--ink); }
+.plat-go {
+  position: absolute; top: 16px; right: 18px;
+  font: 700 9.5px var(--mono) !important; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--cyan) !important; margin: 0 !important;
+}
+.family a.soon { color: var(--dim); }
+.family a.soon:hover { border-color: var(--cyan); color: var(--cyan); text-decoration: none; }
