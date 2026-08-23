@@ -170,11 +170,12 @@ const INSTALL = "git clone https://github.com/naturalstate/macWTF.git && cd macW
 // The WTF family. Only macOS has a working tool; the others are at varying
 // stages, and saying which is more useful than four identical "coming soon"s.
 const PLATFORMS = [
-  { name: "macOS",   status: "available now",      on: true },
+  { name: "macOS",   status: "available now", on: true },
+  { name: "Windows", status: "site up, tool in design",
+    href: "https://naturalstate.github.io/windowswtf_website/" },
   { name: "Android", status: "site up, tool in design",
     href: "https://naturalstate.github.io/androidWTF_website/" },
   { name: "Kali",    status: "planned" },
-  { name: "Windows", status: "planned" },
 ];
 
 function Home({ data, packs }) {
@@ -845,9 +846,9 @@ function App({ data, packs }) {
       <footer class="foot">
         <div class="family">
           <span class="here">macWTF</span>
+          <a class="soon" href="https://naturalstate.github.io/windowswtf_website/">WindowsWTF <em>site</em></a>
           <a class="soon" href="https://naturalstate.github.io/androidWTF_website/">AndroidWTF <em>site</em></a>
           <span class="soon">KaliWTF <em>soon</em></span>
-          <span class="soon">WindowsWTF <em>soon</em></span>
         </div>
         <p style="margin:18px 0 0">
           Generated from the macWTF manifests · package names verified against their registries ·
