@@ -2,453 +2,6 @@
  "generated": "from macWTF manifests",
  "tools": [
   {
-   "id": "zeek",
-   "name": "Zeek",
-   "description": "Network security monitor that turns traffic into rich connection and protocol logs",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "zeek",
-   "license": "free",
-   "homepage": "https://zeek.org",
-   "notes": "Logs rather than alerts: the output is the evidence trail most NSM workflows are built on.",
-   "flags": [],
-   "manualSteps": [
-    "Live capture needs root and an interface: sudo zeek -i en0. Reading a pcap does not."
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": [
-    "kali",
-    "windows"
-   ]
-  },
-  {
-   "id": "suricata",
-   "name": "Suricata",
-   "description": "Signature-based IDS, IPS and network security monitoring engine",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "suricata",
-   "license": "free",
-   "homepage": "https://suricata.io",
-   "notes": "",
-   "flags": [],
-   "manualSteps": [
-    "Fetch a ruleset before first run: suricata-update, then point suricata.yaml at it."
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": [
-    "kali"
-   ]
-  },
-  {
-   "id": "snort",
-   "name": "Snort",
-   "description": "Flexible network intrusion detection system",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "snort",
-   "license": "free",
-   "homepage": "https://www.snort.org",
-   "notes": "Homebrew ships the 2.9 series. Snort 3 is a separate lineage and is not in core.",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": [
-    "kali"
-   ]
-  },
-  {
-   "id": "ntopng",
-   "name": "ntopng",
-   "description": "Web interface showing live traffic, top talkers and flows",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "ntopng",
-   "license": "freemium",
-   "homepage": "https://www.ntop.org/products/traffic-analysis/ntop/",
-   "notes": "",
-   "flags": [],
-   "manualSteps": [
-    "Starts a web UI on http://localhost:3000, default login admin/admin. Change it immediately.",
-    "Capturing from an interface needs root."
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": [
-    "kali"
-   ]
-  },
-  {
-   "id": "nfdump",
-   "name": "nfdump",
-   "description": "Collect and query NetFlow, sFlow and IPFIX data from the command line",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "nfdump",
-   "license": "free",
-   "homepage": "https://github.com/phaag/nfdump",
-   "notes": "nfcapd collects, nfdump queries. NetFlow is a protocol, not a product; this is the tooling for it.",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": [
-    "kali"
-   ]
-  },
-  {
-   "id": "osquery",
-   "name": "osquery",
-   "description": "Exposes the operating system as a SQL database you can query live",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "cask",
-   "package": "osquery",
-   "license": "free",
-   "homepage": "https://osquery.io",
-   "notes": "Excellent on macOS: process, socket, launchd and persistence visibility in one query language.",
-   "flags": [
-    "tcc"
-   ],
-   "manualSteps": [
-    "osqueryd needs Full Disk Access to read protected paths. osqueryi works interactively without it, with gaps."
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": [
-    "kali",
-    "windows"
-   ]
-  },
-  {
-   "id": "velociraptor",
-   "name": "Velociraptor",
-   "description": "Endpoint DFIR and hunting, collecting forensic artefacts with its VQL query language",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "curl",
-   "package": "https://github.com/Velocidex/velociraptor/releases/download/v0.77.2/velociraptor-v0.77.2-darwin-arm64",
-   "license": "free",
-   "homepage": "https://docs.velociraptor.app",
-   "notes": "Version-pinned download. `macwtf check` is what catches the pin going stale.",
-   "flags": [
-    "tcc"
-   ],
-   "manualSteps": [
-    "Grant Full Disk Access before collecting, or artefact collection silently returns partial results.",
-    "Standalone triage needs no server: velociraptor artifacts collect <name>."
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "wazuh-agent",
-   "name": "Wazuh agent",
-   "description": "Ships file integrity, log and rootkit telemetry to a Wazuh server",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "curl",
-   "package": "https://packages.wazuh.com/4.x/macos/wazuh-agent-4.14.0-1.arm64.pkg",
-   "license": "free",
-   "homepage": "https://wazuh.com",
-   "notes": "Agent only. Installs to /Library/Ossec via a signed .pkg, so it needs admin rights.",
-   "flags": [],
-   "manualSteps": [
-    "Set the manager address before starting: edit /Library/Ossec/etc/ossec.conf, then sudo /Library/Ossec/bin/wazuh-control start.",
-    "The agent is useless without a Wazuh server to report to, and the server is Linux only."
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "chainsaw",
-   "name": "Chainsaw",
-   "description": "Fast search and hunting across Windows forensic artefacts, with Sigma rule support",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "chainsaw",
-   "license": "free",
-   "homepage": "https://github.com/WithSecureLabs/chainsaw",
-   "notes": "Analyses Windows evidence from a macOS workstation; nothing here needs a Windows host.",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "hayabusa",
-   "name": "Hayabusa",
-   "description": "Builds attack timelines from Windows EVTX event logs",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "curl",
-   "package": "https://github.com/Yamato-Security/hayabusa/releases/download/v4.0.0/hayabusa-4.0.0-mac-aarch64.zip",
-   "license": "free",
-   "homepage": "https://github.com/Yamato-Security/hayabusa",
-   "notes": "Unverified for one specific reason: the release zip is believed to contain the binary under a versioned name such as hayabusa-4.0.0-mac-aarch64 rather than plain `hayabusa`, and placeArtifact matches the binary name exactly. Confirm the archive layout on the VM and set `binary` to whatever is actually inside, then clear this flag.",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": true,
-   "alsoOn": []
-  },
-  {
-   "id": "evtx",
-   "name": "evtx",
-   "description": "Parses Windows XML Event Log files to XML or JSON",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "evtx",
-   "license": "free",
-   "homepage": "https://github.com/omerbenamram/evtx",
-   "notes": "Plumbing under the other Windows log tooling. The CLI it installs is evtx_dump, not evtx.",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "sigma-cli",
-   "name": "Sigma CLI",
-   "description": "Converts vendor-neutral Sigma detection rules into a SIEM's native query dialect",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "sigma-cli",
-   "license": "free",
-   "homepage": "https://github.com/SigmaHQ/sigma-cli",
-   "notes": "Installs the `sigma` command. Rule packs come from the SigmaHQ repository separately.",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "prometheus",
-   "name": "Prometheus",
-   "description": "Time-series metrics database that scrapes targets and drives alerting",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "prometheus",
-   "license": "free",
-   "homepage": "https://prometheus.io",
-   "notes": "A metrics system, not a SIEM, despite how it is often listed.",
-   "flags": [],
-   "manualSteps": [
-    "Run as a background service with: brew services start prometheus"
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": [
-    "kali"
-   ]
-  },
-  {
-   "id": "grafana",
-   "name": "Grafana",
-   "description": "Dashboards over Prometheus, Loki and most other data sources",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "grafana",
-   "license": "freemium",
-   "homepage": "https://grafana.com",
-   "notes": "",
-   "flags": [],
-   "manualSteps": [
-    "brew services start grafana, then open http://localhost:3000 (admin/admin on first login)."
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": [
-    "kali"
-   ]
-  },
-  {
-   "id": "loki",
-   "name": "Loki",
-   "description": "Horizontally scalable log aggregation, indexed by label rather than full text",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "loki",
-   "license": "free",
-   "homepage": "https://grafana.com/oss/loki/",
-   "notes": "Far lighter than Elasticsearch for local use, and pairs directly with Grafana.",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "promtail",
-   "name": "Promtail",
-   "description": "Agent that tails log files and ships them into Loki",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "promtail",
-   "license": "free",
-   "homepage": "https://grafana.com/docs/loki/latest/send-data/promtail/",
-   "notes": "",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [
-    "loki"
-   ],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "fluent-bit",
-   "name": "Fluent Bit",
-   "description": "Lightweight, vendor-neutral log and metrics forwarder",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "fluent-bit",
-   "license": "free",
-   "homepage": "https://fluentbit.io",
-   "notes": "",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "zabbix",
-   "name": "Zabbix",
-   "description": "Infrastructure monitoring and alerting for hosts, services and network gear",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "zabbix",
-   "license": "free",
-   "homepage": "https://www.zabbix.com",
-   "notes": "The formula carries the server and agent components.",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": [
-    "kali"
-   ]
-  },
-  {
-   "id": "filebeat",
-   "name": "Filebeat",
-   "description": "Elastic's log file shipper",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "filebeat",
-   "license": "free",
-   "homepage": "https://www.elastic.co/beats/filebeat",
-   "notes": "",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "auditbeat",
-   "name": "Auditbeat",
-   "description": "Elastic's audit and file integrity shipper",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "auditbeat",
-   "license": "free",
-   "homepage": "https://www.elastic.co/beats/auditbeat",
-   "notes": "",
-   "flags": [
-    "tcc"
-   ],
-   "manualSteps": [
-    "File integrity monitoring of protected paths needs Full Disk Access."
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "packetbeat",
-   "name": "Packetbeat",
-   "description": "Elastic's network traffic shipper",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "packetbeat",
-   "license": "free",
-   "homepage": "https://www.elastic.co/beats/packetbeat",
-   "notes": "",
-   "flags": [],
-   "manualSteps": [
-    "Packet capture needs root."
-   ],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
-   "id": "logstash",
-   "name": "Logstash",
-   "description": "Elastic's ingest, parse and transform pipeline",
-   "category": "blue-team",
-   "categoryLabel": "Blue Team & Monitoring",
-   "isSecurity": true,
-   "backend": "brew",
-   "package": "logstash",
-   "license": "free",
-   "homepage": "https://www.elastic.co/logstash",
-   "notes": "JVM based and heavy. Fluent Bit is the lighter option for simple forwarding.",
-   "flags": [],
-   "manualSteps": [],
-   "requires": [],
-   "unverified": false,
-   "alsoOn": []
-  },
-  {
    "id": "xcode-command-line-tools",
    "name": "Xcode Command Line Tools",
    "description": "xcode-select --install, prerequisite for everything",
@@ -2607,6 +2160,255 @@
    "alsoOn": []
   },
   {
+   "id": "zeek",
+   "name": "Zeek",
+   "description": "Network security monitor that turns traffic into rich connection and protocol logs",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "brew",
+   "package": "zeek",
+   "license": "free",
+   "homepage": "https://zeek.org",
+   "notes": "Logs rather than alerts: the output is the evidence trail most NSM workflows are built on.",
+   "flags": [],
+   "manualSteps": [
+    "Live capture needs root and an interface: sudo zeek -i en0. Reading a pcap does not."
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": [
+    "kali",
+    "windows"
+   ]
+  },
+  {
+   "id": "suricata",
+   "name": "Suricata",
+   "description": "Signature-based IDS, IPS and network security monitoring engine",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "brew",
+   "package": "suricata",
+   "license": "free",
+   "homepage": "https://suricata.io",
+   "notes": "",
+   "flags": [],
+   "manualSteps": [
+    "Fetch a ruleset before first run: suricata-update, then point suricata.yaml at it."
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": [
+    "kali"
+   ]
+  },
+  {
+   "id": "snort",
+   "name": "Snort",
+   "description": "Flexible network intrusion detection system",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "brew",
+   "package": "snort",
+   "license": "free",
+   "homepage": "https://www.snort.org",
+   "notes": "Homebrew ships the 2.9 series. Snort 3 is a separate lineage and is not in core.",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": [
+    "kali"
+   ]
+  },
+  {
+   "id": "ntopng",
+   "name": "ntopng",
+   "description": "Web interface showing live traffic, top talkers and flows",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "brew",
+   "package": "ntopng",
+   "license": "freemium",
+   "homepage": "https://www.ntop.org/products/traffic-analysis/ntop/",
+   "notes": "",
+   "flags": [],
+   "manualSteps": [
+    "Starts a web UI on http://localhost:3000, default login admin/admin. Change it immediately.",
+    "Capturing from an interface needs root."
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": [
+    "kali"
+   ]
+  },
+  {
+   "id": "nfdump",
+   "name": "nfdump",
+   "description": "Collect and query NetFlow, sFlow and IPFIX data from the command line",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "brew",
+   "package": "nfdump",
+   "license": "free",
+   "homepage": "https://github.com/phaag/nfdump",
+   "notes": "nfcapd collects, nfdump queries. NetFlow is a protocol, not a product; this is the tooling for it.",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": [
+    "kali"
+   ]
+  },
+  {
+   "id": "osquery",
+   "name": "osquery",
+   "description": "Exposes the operating system as a SQL database you can query live",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "cask",
+   "package": "osquery",
+   "license": "free",
+   "homepage": "https://osquery.io",
+   "notes": "Excellent on macOS: process, socket, launchd and persistence visibility in one query language.",
+   "flags": [
+    "tcc"
+   ],
+   "manualSteps": [
+    "osqueryd needs Full Disk Access to read protected paths. osqueryi works interactively without it, with gaps."
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": [
+    "kali",
+    "windows"
+   ]
+  },
+  {
+   "id": "velociraptor",
+   "name": "Velociraptor",
+   "description": "Endpoint DFIR and hunting, collecting forensic artefacts with its VQL query language",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "curl",
+   "package": "https://github.com/Velocidex/velociraptor/releases/download/v0.77.2/velociraptor-v0.77.2-darwin-arm64",
+   "license": "free",
+   "homepage": "https://docs.velociraptor.app",
+   "notes": "Version-pinned download. `macwtf check` is what catches the pin going stale.",
+   "flags": [
+    "tcc"
+   ],
+   "manualSteps": [
+    "Grant Full Disk Access before collecting, or artefact collection silently returns partial results.",
+    "Standalone triage needs no server: velociraptor artifacts collect <name>."
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "wazuh-agent",
+   "name": "Wazuh agent",
+   "description": "Ships file integrity, log and rootkit telemetry to a Wazuh server",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "curl",
+   "package": "https://packages.wazuh.com/4.x/macos/wazuh-agent-4.14.0-1.arm64.pkg",
+   "license": "free",
+   "homepage": "https://wazuh.com",
+   "notes": "Agent only. Installs to /Library/Ossec via a signed .pkg, so it needs admin rights.",
+   "flags": [],
+   "manualSteps": [
+    "Set the manager address before starting: edit /Library/Ossec/etc/ossec.conf, then sudo /Library/Ossec/bin/wazuh-control start.",
+    "The agent is useless without a Wazuh server to report to, and the server is Linux only."
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "chainsaw",
+   "name": "Chainsaw",
+   "description": "Fast search and hunting across Windows forensic artefacts, with Sigma rule support",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "brew",
+   "package": "chainsaw",
+   "license": "free",
+   "homepage": "https://github.com/WithSecureLabs/chainsaw",
+   "notes": "Analyses Windows evidence from a macOS workstation; nothing here needs a Windows host.",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "hayabusa",
+   "name": "Hayabusa",
+   "description": "Builds attack timelines from Windows EVTX event logs",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "curl",
+   "package": "https://github.com/Yamato-Security/hayabusa/releases/download/v4.0.0/hayabusa-4.0.0-mac-aarch64.zip",
+   "license": "free",
+   "homepage": "https://github.com/Yamato-Security/hayabusa",
+   "notes": "Unverified for one specific reason: the release zip is believed to contain the binary under a versioned name such as hayabusa-4.0.0-mac-aarch64 rather than plain `hayabusa`, and placeArtifact matches the binary name exactly. Confirm the archive layout on the VM and set `binary` to whatever is actually inside, then clear this flag.",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": true,
+   "alsoOn": []
+  },
+  {
+   "id": "evtx",
+   "name": "evtx",
+   "description": "Parses Windows XML Event Log files to XML or JSON",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "brew",
+   "package": "evtx",
+   "license": "free",
+   "homepage": "https://github.com/omerbenamram/evtx",
+   "notes": "Plumbing under the other Windows log tooling. The CLI it installs is evtx_dump, not evtx.",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "sigma-cli",
+   "name": "Sigma CLI",
+   "description": "Converts vendor-neutral Sigma detection rules into a SIEM's native query dialect",
+   "category": "detection",
+   "categoryLabel": "Detection & Response",
+   "isSecurity": true,
+   "backend": "brew",
+   "package": "sigma-cli",
+   "license": "free",
+   "homepage": "https://github.com/SigmaHQ/sigma-cli",
+   "notes": "Installs the `sigma` command. Rule packs come from the SigmaHQ repository separately.",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
    "id": "visual-studio-code",
    "name": "Visual Studio Code",
    "description": "Open-source code editor",
@@ -3862,6 +3664,204 @@
    "license": "free",
    "homepage": "",
    "notes": "",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "prometheus",
+   "name": "Prometheus",
+   "description": "Time-series metrics database that scrapes targets and drives alerting",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "prometheus",
+   "license": "free",
+   "homepage": "https://prometheus.io",
+   "notes": "A metrics system, not a SIEM, despite how it is often listed.",
+   "flags": [],
+   "manualSteps": [
+    "Run as a background service with: brew services start prometheus"
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": [
+    "kali"
+   ]
+  },
+  {
+   "id": "grafana",
+   "name": "Grafana",
+   "description": "Dashboards over Prometheus, Loki and most other data sources",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "grafana",
+   "license": "freemium",
+   "homepage": "https://grafana.com",
+   "notes": "",
+   "flags": [],
+   "manualSteps": [
+    "brew services start grafana, then open http://localhost:3000 (admin/admin on first login)."
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": [
+    "kali"
+   ]
+  },
+  {
+   "id": "loki",
+   "name": "Loki",
+   "description": "Horizontally scalable log aggregation, indexed by label rather than full text",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "loki",
+   "license": "free",
+   "homepage": "https://grafana.com/oss/loki/",
+   "notes": "Far lighter than Elasticsearch for local use, and pairs directly with Grafana.",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "promtail",
+   "name": "Promtail",
+   "description": "Agent that tails log files and ships them into Loki",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "promtail",
+   "license": "free",
+   "homepage": "https://grafana.com/docs/loki/latest/send-data/promtail/",
+   "notes": "",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [
+    "loki"
+   ],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "fluent-bit",
+   "name": "Fluent Bit",
+   "description": "Lightweight, vendor-neutral log and metrics forwarder",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "fluent-bit",
+   "license": "free",
+   "homepage": "https://fluentbit.io",
+   "notes": "",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "zabbix",
+   "name": "Zabbix",
+   "description": "Infrastructure monitoring and alerting for hosts, services and network gear",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "zabbix",
+   "license": "free",
+   "homepage": "https://www.zabbix.com",
+   "notes": "The formula carries the server and agent components.",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": [
+    "kali"
+   ]
+  },
+  {
+   "id": "filebeat",
+   "name": "Filebeat",
+   "description": "Elastic's log file shipper",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "filebeat",
+   "license": "free",
+   "homepage": "https://www.elastic.co/beats/filebeat",
+   "notes": "",
+   "flags": [],
+   "manualSteps": [],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "auditbeat",
+   "name": "Auditbeat",
+   "description": "Elastic's audit and file integrity shipper",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "auditbeat",
+   "license": "free",
+   "homepage": "https://www.elastic.co/beats/auditbeat",
+   "notes": "",
+   "flags": [
+    "tcc"
+   ],
+   "manualSteps": [
+    "File integrity monitoring of protected paths needs Full Disk Access."
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "packetbeat",
+   "name": "Packetbeat",
+   "description": "Elastic's network traffic shipper",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "packetbeat",
+   "license": "free",
+   "homepage": "https://www.elastic.co/beats/packetbeat",
+   "notes": "",
+   "flags": [],
+   "manualSteps": [
+    "Packet capture needs root."
+   ],
+   "requires": [],
+   "unverified": false,
+   "alsoOn": []
+  },
+  {
+   "id": "logstash",
+   "name": "Logstash",
+   "description": "Elastic's ingest, parse and transform pipeline",
+   "category": "monitoring",
+   "categoryLabel": "Monitoring",
+   "isSecurity": false,
+   "backend": "brew",
+   "package": "logstash",
+   "license": "free",
+   "homepage": "https://www.elastic.co/logstash",
+   "notes": "JVM based and heavy. Fluent Bit is the lighter option for simple forwarding.",
    "flags": [],
    "manualSteps": [],
    "requires": [],
@@ -10655,66 +10655,6 @@
    "count": 100
   },
   {
-   "id": "blue-team",
-   "name": "Blue Team",
-   "description": "Defensive tooling: monitoring, endpoint telemetry, forensics and traffic analysis",
-   "tools": [
-    "ripgrep",
-    "fd",
-    "bat",
-    "jq",
-    "eza",
-    "maccy",
-    "zeek",
-    "suricata",
-    "snort",
-    "ntopng",
-    "nfdump",
-    "osquery",
-    "velociraptor",
-    "wazuh-agent",
-    "chainsaw",
-    "hayabusa",
-    "evtx",
-    "sigma-cli",
-    "prometheus",
-    "grafana",
-    "loki",
-    "promtail",
-    "fluent-bit",
-    "zabbix",
-    "filebeat",
-    "auditbeat",
-    "packetbeat",
-    "logstash",
-    "ghidra",
-    "cutter",
-    "imhex",
-    "radare2",
-    "rizin",
-    "binary-ninja",
-    "hopper-disassembler",
-    "ida-free",
-    "binwalk",
-    "yara",
-    "capa",
-    "floss",
-    "detect-it-easy",
-    "hex-fiend",
-    "010-editor",
-    "volatility3",
-    "sleuthkit",
-    "autopsy",
-    "foremost",
-    "bulk-extractor",
-    "lldb",
-    "gdb",
-    "vbindiff",
-    "wireshark"
-   ],
-   "count": 52
-  },
-  {
    "id": "recon",
    "name": "Recon",
    "description": "Port scanning, content discovery and enumeration",
@@ -10771,6 +10711,56 @@
    "count": 48
   },
   {
+   "id": "blue-team",
+   "name": "Blue Team",
+   "description": "Defensive tooling: detection, endpoint telemetry, forensics and traffic analysis",
+   "tools": [
+    "ripgrep",
+    "fd",
+    "bat",
+    "jq",
+    "eza",
+    "maccy",
+    "zeek",
+    "suricata",
+    "snort",
+    "ntopng",
+    "nfdump",
+    "osquery",
+    "velociraptor",
+    "wazuh-agent",
+    "chainsaw",
+    "hayabusa",
+    "evtx",
+    "sigma-cli",
+    "ghidra",
+    "cutter",
+    "imhex",
+    "radare2",
+    "rizin",
+    "binary-ninja",
+    "hopper-disassembler",
+    "ida-free",
+    "binwalk",
+    "yara",
+    "capa",
+    "floss",
+    "detect-it-easy",
+    "hex-fiend",
+    "010-editor",
+    "volatility3",
+    "sleuthkit",
+    "autopsy",
+    "foremost",
+    "bulk-extractor",
+    "lldb",
+    "gdb",
+    "vbindiff",
+    "wireshark"
+   ],
+   "count": 42
+  },
+  {
    "id": "web",
    "name": "Web Hacking",
    "description": "Intercepting proxies, injection testing and content discovery",
@@ -10816,6 +10806,30 @@
    "count": 37
   },
   {
+   "id": "monitoring",
+   "name": "Monitoring",
+   "description": "Metrics, dashboards and log pipelines: Prometheus, Grafana, Loki and the shippers",
+   "tools": [
+    "ripgrep",
+    "fd",
+    "bat",
+    "jq",
+    "eza",
+    "maccy",
+    "prometheus",
+    "grafana",
+    "loki",
+    "promtail",
+    "fluent-bit",
+    "zabbix",
+    "filebeat",
+    "auditbeat",
+    "packetbeat",
+    "logstash"
+   ],
+   "count": 16
+  },
+  {
    "id": "desktop",
    "name": "Desktop",
    "description": "Window management and clipboard tooling",
@@ -10848,12 +10862,6 @@
  ],
  "categories": [
   {
-   "slug": "blue-team",
-   "label": "Blue Team & Monitoring",
-   "security": true,
-   "count": 22
-  },
-  {
    "slug": "bootstrap",
    "label": "Bootstrap",
    "security": false,
@@ -10872,10 +10880,22 @@
    "count": 95
   },
   {
+   "slug": "detection",
+   "label": "Detection & Response",
+   "security": true,
+   "count": 12
+  },
+  {
    "slug": "dev",
    "label": "Development",
    "security": false,
    "count": 70
+  },
+  {
+   "slug": "monitoring",
+   "label": "Monitoring",
+   "security": false,
+   "count": 10
   },
   {
    "slug": "payloads",

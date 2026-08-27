@@ -22,12 +22,13 @@ CATEGORY_LABEL = {
     "sdr": "SDR, RF & Hardware", "reporting": "Reporting",
     "utilities": "Utilities", "system-tweaks": "System Tweaks",
     "wordlists": "Wordlists", "payloads": "Payloads",
-    "blue-team": "Blue Team & Monitoring",
+    "detection": "Detection & Response", "monitoring": "Monitoring",
 }
-# blue-team does not carry the sec- prefix but is unambiguously security, so it
-# is named here rather than inferred.
+# detection does not carry the sec- prefix but is unambiguously security, so it
+# is named here rather than inferred. monitoring deliberately is not: Prometheus
+# and Grafana are operations tooling that a SOC happens to use.
 SECURITY = ({k for k in CATEGORY_LABEL if k.startswith("sec-")}
-            | {"payloads", "wordlists", "blue-team"})
+            | {"payloads", "wordlists", "detection"})
 
 def load(pattern):
     for path in sorted(glob.glob(pattern)):
